@@ -24,8 +24,10 @@ import { DATA } from "../data";
 import SortIcon from "./icons/SortIcon";
 import Filters from "./Filters";
 
+import StatusCell from "@/components/StatusCell";
+
 const TaskTable = () => {
-  const [data] = useState(DATA.data);
+  const [data, setData] = useState(DATA.data);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnFilters, setColumnFilters] = useState([]);
 
@@ -39,7 +41,8 @@ const TaskTable = () => {
       {
         accessorKey: "status",
         header: "Status",
-        cell: (info: any) => info.getValue(),
+        cell: StatusCell,
+        enableSorting: false,
         filterFn: (row, columnId, filterValue) => {
           if (!filterValue) return true;
           return row.getValue(columnId) === filterValue;
@@ -76,6 +79,19 @@ const TaskTable = () => {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    meta: {
+      updateData: (rowIndex, columnId, value) =>
+        setData((prev) =>
+          prev.map((row, index) =>
+            index === rowIndex
+              ? {
+                  ...prev[rowIndex],
+                  [columnId]: value,
+                }
+              : row
+          )
+        ),
+    },
   });
 
   return (

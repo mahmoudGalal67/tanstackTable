@@ -56,7 +56,7 @@ const Filters = ({
       />
 
       <Select
-        value={statusFilter || ""}
+        value={statusFilter || null}
         onValueChange={(val) => onStatusChange(val)}
       >
         <SelectTrigger className="w-36">
@@ -68,6 +68,9 @@ const Filters = ({
               {status}
             </SelectItem>
           ))}
+          <SelectItem key="none" value={null}>
+            All
+          </SelectItem>
         </SelectContent>
       </Select>
     </div>
